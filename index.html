@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>毛球日记 · 宠物领养主页</title>
+<style>
+  :root {
+    --ink: #1b2330;
+    --muted: #667085;
+    --line: #e8ecf3;
+    --brand: #ff7a59;
+    --brand-soft: #fff2ee;
+    --card: #ffffff;
+    --bg: #f7f8fb;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- 导航 ---------- */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .logo span.dot {
+    width: 26px; height: 26px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #ff9d6c, #ff7a59);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    color: #fff;
+  }
+  nav ul { display: flex; gap: 26px; list-style: none; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.16s ease;
+  }
+  nav a:hover { color: var(--ink); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 48px;
+    align-items: center;
+    padding: 44px 0 56px;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--brand);
+    background: var(--brand-soft);
+    border: 1px solid #ffd9cd;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: 44px;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+  }
+  h1 em { font-style: normal; color: var(--brand); }
+  .lede {
+    font-size: 15.5px;
+    color: var(--muted);
+    max-width: 440px;
+    margin-bottom: 26px;
+  }
+  .cta-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    border: none;
+    border-radius: 11px;
+    padding: 12px 22px;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  /* 元素级标注 ①：主按钮改为品牌红，并补上悬停态 */
+  .btn-primary {
+    background: #ff5b5b;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(255, 91, 91, 0.32);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(255, 91, 91, 0.4); }
+  .btn-ghost {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { border-color: #d3d9e4; }
+
+  .hero-media {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background:
+      radial-gradient(circle at 30% 25%, #ffe3d6 0%, rgba(255,227,214,0) 55%),
+      linear-gradient(150deg, #ffd9c7, #ffb59b 60%, #f79c7d);
+    box-shadow: 0 24px 60px rgba(255, 122, 89, 0.22);
+    display: grid;
+    place-items: center;
+  }
+  .hero-media .emoji { font-size: 96px; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.12)); }
+  .hero-media .badge {
+    position: absolute;
+    left: 16px; bottom: 16px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    border-radius: 11px;
+    padding: 8px 13px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #8a4a33;
+  }
+
+  /* ---------- 数据条 ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+  .stat { background: #fff; padding: 20px 22px; }
+  .stat b { display: block; font-size: 26px; letter-spacing: -0.02em; }
+  .stat span { font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- 宠物卡片 ---------- */
+  section h2 {
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 26px; }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 64px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: #ffd9cd;
+    box-shadow: 0 14px 34px rgba(27, 35, 48, 0.08);
+  }
+  .card .pic {
+    height: 132px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 58px;
+    margin-bottom: 14px;
+    background: #fff6f2;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 4px; }
+  .card p { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-size: 11.5px;
+    color: #8a4a33;
+    background: #fff2ee;
+    border: 1px solid #ffdfd4;
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  /* ---------- 页脚 ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 26px 0 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  /* 元素级标注 ⑤：窄屏下英雄区与卡片改为单列 */
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; gap: 28px; padding: 28px 0 40px; }
+    h1 { font-size: 34px; }
+    .cards { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <div class="logo"><span class="dot">🐾</span>毛球日记</div>
+      <ul>
+        <li><a href="#pets">待领养</a></li>
+        <li><a href="#story">救助故事</a></li>
+        <li><a href="#join">成为志愿者</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <span class="tag">本周新增 12 只毛孩子</span>
+        <h1>给它们一个<br><em>可以赖着不走</em>的家</h1>
+        <p class="lede">
+          我们记录每只流浪动物的健康状况、性格与救助经过。领养不是带走一只宠物，
+          而是接住一个已经在等你的家人。
+        </p>
+        <div class="cta-row">
+          <button class="btn btn-primary" id="adoptBtn">我要领养</button>
+          <button class="btn btn-ghost">看看救助故事</button>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <div class="emoji">🐱</div>
+        <div class="badge">豆豆 · 已等 128 天</div>
+      </div>
+    </header>
+
+    <div class="stats">
+      <div class="stat"><b>1,286</b><span>累计成功领养</span></div>
+      <div class="stat"><b>37</b><span>合作救助站</span></div>
+      <div class="stat"><b>94%</b><span>回访满意度</span></div>
+    </div>
+
+    <section id="pets">
+      <h2>正在等待的它们</h2>
+      <p class="sub">每一只都已完成体检、驱虫与基础疫苗，可直接预约见面。</p>
+      <div class="cards">
+        <article class="card">
+          <div class="pic">🐶</div>
+          <h3>豆豆 · 中华田园犬</h3>
+          <p>两岁，性格黏人，会自己叼牵引绳。</p>
+          <div class="meta"><span class="chip">已绝育</span><span class="chip">亲人</span></div>
+        </article>
+        <article class="card">
+          <div class="pic">🐱</div>
+          <h3>年糕 · 三花猫</h3>
+          <p>一岁半，安静，喜欢趴在窗台晒太阳。</p>
+          <div class="meta"><span class="chip">已驱虫</span><span class="chip">安静</span></div>
+        </article>
+        <article class="card">
+          <div class="pic">🐰</div>
+          <h3>团子 · 垂耳兔</h3>
+          <p>八个月，好奇心强，吃草很响。</p>
+          <div class="meta"><span class="chip">好脾气</span><span class="chip">已体检</span></div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 毛球日记 · 一个用于页面精准调整实操的示例站点</span>
+      <span>领养咨询：hi@maoqiu.example</span>
+    </footer>
+  </div>
+
+<script>
+  document.getElementById('adoptBtn').addEventListener('click', function () {
+    this.textContent = '已为你预留表单 →';
+    this.style.background = '#e14b4b';
+    setTimeout(() => {
+      this.textContent = '我要领养';
+      this.style.background = '';
+    }, 1600);
+  });
+</script>
+</body>
+</html>
